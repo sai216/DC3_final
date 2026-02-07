@@ -1,0 +1,27 @@
+node_modules
+# Keep environment variables out of version control
+.env
+.env.*
+
+# Service account keys and secrets
+/services/gcp.json
+/gcp.json
+*service-account*.json
+*credentials*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+/generated/prisma
+AUTH_API.md
+QUOTES_CALENDAR_API.md
+COMPLETE_API_SUMMARY.md
+test-api.sh
+test-audit-api.sh
+test-all-apis.sh
+AUDIT_TESTING.md
+/dist
+node_modules/
+/build
+/.next

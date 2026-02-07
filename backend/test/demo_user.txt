@@ -1,0 +1,20 @@
+📋 Demo User Details:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ID:              52fcc8ee-9c00-43e9-aff3-125ed28b2d6f
+Email:           shradhesh@test.com
+Business Name:   Demo Company
+Phone:           +1234567890
+Auth Stage:      2
+Email Verified:  true
+Phone Verified:  true
+
+🔑 JWT Token for Testing:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MmZjYzhlZS05YzAwLTQzZTktYWZmMy0xMjVlZDI4YjJkNmYiLCJhdXRoU3RhZ2UiOjIsImlhdCI6MTc2OTE5NjA3NywiZXhwIjoxNzcwMDYwMDc3fQ.PHxJEcwBO5nHKroSFrBucBdW-330Nxq-AVEn3QSHRJc
+
+📝 Usage Example:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+curl -X GET http://localhost:8000/api/auth/session \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MmZjYzhlZS05YzAwLTQzZTktYWZmMy0xMjVlZDI4YjJkNmYiLCJhdXRoU3RhZ2UiOjIsImlhdCI6MTc2OTE5NjA3NywiZXhwIjoxNzcwMDYwMDc3fQ.PHxJEcwBO5nHKroSFrBucBdW-330Nxq-AVEn3QSHRJc"
+
+✨ You can now use this token to test protected routes!

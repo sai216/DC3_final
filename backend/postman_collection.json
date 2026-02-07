@@ -1,0 +1,254 @@
+{
+  "info": {
+    "name": "DC3 Authentication API",
+    "description": "Two-phase authentication system with Email and Phone/WhatsApp OTP",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "test@example.com",
+      "type": "string"
+    },
+    {
+      "key": "phoneNumber",
+      "value": "+1234567890",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "Phase 1 - Email Auth",
+      "item": [
+        {
+          "name": "Send Email OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    console.log('OTP Request successful');",
+                  "    console.log('Check your email for the OTP code');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"businessName\": \"Test Company\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/email/send-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "email", "send-otp"]
+            }
+          }
+        },
+        {
+          "name": "Verify Email OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('token', response.token);",
+                  "    console.log('Email verified! Token saved.');",
+                  "    console.log('Auth Stage: ' + response.user.authStage);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"otpCode\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/email/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "email", "verify-otp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Phone Auth",
+      "item": [
+        {
+          "name": "Send Phone OTP (SMS)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"{{phoneNumber}}\",\n  \"method\": \"sms\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/phone/send-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "phone", "send-otp"]
+            }
+          }
+        },
+        {
+          "name": "Send WhatsApp OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"{{phoneNumber}}\",\n  \"method\": \"whatsapp\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/phone/send-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "phone", "send-otp"]
+            }
+          }
+        },
+        {
+          "name": "Verify Phone OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('token', response.token);",
+                  "    console.log('Phone verified! New token saved.');",
+                  "    console.log('Auth Stage: ' + response.user.authStage);",
+                  "    console.log('Authentication complete!');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"{{phoneNumber}}\",\n  \"otpCode\": \"654321\",\n  \"method\": \"sms\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/phone/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "phone", "verify-otp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Session Management",
+      "item": [
+        {
+          "name": "Get Session",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/session",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "session"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "info": {
+    "name": "Audit API - Complete Test Collection",
+    "description": "Test all audit endpoints with correct data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1MzZhYjU0YS05MGVhLTQ5NzMtOWMxYS02Njk5OTNmZmYzYjciLCJhdXRoU3RhZ2UiOjIsImlhdCI6MTc3MDMyNDQ4MCwiZXhwIjoxNzcxMTg4NDgwfQ.TybtfU57N5JzLktZ70A0NwaUQ0uP2zh31TQQHVOaRlE",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "manifestId",
+      "value": ""
+    },
+    {
+      "key": "identityId",
+      "value": ""
+    },
+    {
+      "key": "meetingId",
+      "value": ""
+    },
+    {
+      "key": "auditId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Upload Files",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "files",
+              "type": "file",
+              "src": "path/to/your/document.pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/audit/upload",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "upload"]
+        },
+        "description": "Upload supporting documents (PDF, DOC, DOCX, TXT)\nMax 25MB per file, max 10 files"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Submit Manifest",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201 || pm.response.code === 200) {",
+              "    const jsonData = pm.response.json();",
+              "    if (jsonData.manifestId) {",
+              "        pm.collectionVariables.set('manifestId', jsonData.manifestId);",
+              "        console.log('Manifest ID saved:', jsonData.manifestId);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"loomUrl\": \"https://loom.com/share/abc123xyz\",\n  \"docsUrl\": \"https://docs.google.com/document/d/1234567890/edit\",\n  \"fileIds\": []\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/audit/manifest",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "manifest"]
+        },
+        "description": "Submit Loom video URL and Google Docs URL with optional file IDs"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Submit Identity",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201 || pm.response.code === 200) {",
+              "    const jsonData = pm.response.json();",
+              "    if (jsonData.identityId) {",
+              "        pm.collectionVariables.set('identityId', jsonData.identityId);",
+              "        console.log('Identity ID saved:', jsonData.identityId);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"linkedinUrl\": \"https://linkedin.com/in/yourprofile\",\n  \"businessEmail\": \"your.email@company.com\",\n  \"whatsappNumber\": \"+1234567890\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/audit/identity",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "identity"]
+        },
+        "description": "Submit identity verification information"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Schedule Google Meet",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201 || pm.response.code === 200) {",
+              "    const jsonData = pm.response.json();",
+              "    if (jsonData.meetingId) {",
+              "        pm.collectionVariables.set('meetingId', jsonData.meetingId);",
+              "        console.log('Meeting ID saved:', jsonData.meetingId);",
+              "        console.log('Google Meet Link:', jsonData.googleMeetLink);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"date\": \"2026-02-07\",\n  \"time\": \"14:00\",\n  \"timezone\": \"America/New_York\",\n  \"duration\": 60\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/audit/schedule",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "schedule"]
+        },
+        "description": "Schedule a Google Meet call\n\nRequired fields:\n- date: YYYY-MM-DD format\n- time: HH:MM (24-hour format)\n- timezone: IANA timezone (e.g., America/New_York, Europe/London)\n- duration: Minutes (optional, default 60)"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Submit Audit",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201 || pm.response.code === 200) {",
+              "    const jsonData = pm.response.json();",
+              "    if (jsonData.auditId) {",
+              "        pm.collectionVariables.set('auditId', jsonData.auditId);",
+              "        console.log('Audit ID saved:', jsonData.auditId);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"manifestId\": \"{{manifestId}}\",\n  \"identityId\": \"{{identityId}}\",\n  \"meetingId\": \"{{meetingId}}\",\n  \"goals\": {\n    \"description\": \"Build a SaaS platform for project management with real-time collaboration\",\n    \"timeline\": \"3-6 months\",\n    \"budget\": \"50000-100000\",\n    \"additionalRequirements\": \"Need mobile app support for iOS and Android\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/audit/submit",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "submit"]
+        },
+        "description": "Finalize the audit submission with all IDs from previous steps"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get My Submissions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/audit/my-submissions",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "my-submissions"]
+        },
+        "description": "Get all audit submissions for the authenticated user"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Submission by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/audit/submission/{{auditId}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "audit", "submission", "{{auditId}}"]
+        },
+        "description": "Get detailed information about a specific audit submission"
+      },
+      "response": []
+    }
+  ]
+}
