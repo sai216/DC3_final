@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { aiService } from '../services/aiService';
-import { embeddingService } from '../services/embeddingService';
+import { aiService } from '../services/aiService.js';
+import { embeddingService } from '../services/embeddingService.js';
 
 const prisma = new PrismaClient();
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../config/database';
-import { ProjectType, Urgency } from '../generated/prisma/client';
+import { prisma } from '../config/database.js';
+import { ProjectType, Urgency } from '@prisma/client';
 
 // Base rates by project type (from .env)
 const BASE_RATES: Record<ProjectType, number> = {

@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { storageService } from '../services/storageService';
-import { googleCalendarService } from '../services/googleCalendarService';
-import { otpService } from '../services/otpService';
+import { storageService } from '../services/storageService.js';
+import { googleCalendarService } from '../services/googleCalendarService.js';
 
 const prisma = new PrismaClient();
 
@@ -57,7 +56,7 @@ class AuditController {
 
       // Save file metadata to database
       const fileRecords = await Promise.all(
-        uploadedFiles.map((fileInfo) =>
+        uploadedFiles.map((fileInfo: any) =>
           prisma.uploadedFile.create({
             data: {
               userId,
@@ -77,7 +76,7 @@ class AuditController {
 
       res.json({
         success: true,
-        files: fileRecords.map((record, index) => ({
+        files: fileRecords.map((record: any, index: number) => ({
           id: record.id,
           url: uploadedFiles[index].signedUrl,
           name: record.originalName,

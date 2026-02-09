@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../config/database';
-import { privyService } from '../services/privyService';
+import { prisma } from '../config/database.js';
+import { privyService } from '../services/privyService.js';
 
 interface JwtPayload {
   userId: string;

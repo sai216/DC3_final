@@ -1,0 +1,19 @@
+{
+  "version": "0.2",
+  "ignorePaths": [
+    "**/node_modules",
+    "**/.next",
+    "**/dist",
+    "**/build",
+    "**/.env",
+    "**/.env.*"
+  ],
+  "words": [
+    "Decensat",
+    "decensat",
+    "genai",
+    "autoprefixer",
+    "tailwindcss",
+    "lucide"
+  ]
+}

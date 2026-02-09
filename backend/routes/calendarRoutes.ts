@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { calendarController } from '../controllers/calendarController';
-import { authenticateToken, requireAuthStage } from '../middleware/authMiddleware';
+import { calendarController } from '../controllers/calendarController.js';
+import { authenticateToken, requireAuthStage } from '../middleware/authMiddleware.js';
 
 const router = Router();
 

@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../config/database';
+import { prisma } from '../config/database.js';
 // import { otpService } from '../services/otpService'; // Commented out - using Privy auth
-import { privyService } from '../services/privyService';
+import { privyService } from '../services/privyService.js';
 
 // Extend Express Request type to include userId
 declare global {
@@ -13,11 +13,6 @@ declare global {
     }
   }
 }
-
-// Generate 6-digit OTP
-const generateOTP = (): string => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
 
 // Generate JWT token
 const generateToken = (userId: string, authStage: number): string => {
@@ -82,7 +77,7 @@ export const authController = {
 
       // Extract email or wallet address
       const email = extractPrivyEmail(privyUser);
-      const walletAddress = privyUser.wallet?.address;
+      const walletAddress = (privyUser as any)?.wallet?.address;
 
       if (!email) {
         res.status(400).json({

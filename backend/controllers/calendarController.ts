@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../config/database';
-import { googleCalendarService } from '../services/googleCalendarService';
+import { prisma } from '../config/database.js';
+import { googleCalendarService } from '../services/googleCalendarService.js';
 
 export const calendarController = {
   /**
@@ -95,6 +95,14 @@ export const calendarController = {
         res.status(404).json({
           success: false,
           error: 'User not found',
+        });
+        return;
+      }
+
+      if (!user.email) {
+        res.status(400).json({
+          success: false,
+          error: 'User email is required to book a strategy call',
         });
         return;
       }

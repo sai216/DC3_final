@@ -2,21 +2,24 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-import authRoutes from './routes/authRoutes';
-import quoteRoutes from './routes/quoteRoutes';
-import calendarRoutes from './routes/calendarRoutes';
-import auditRoutes from './routes/auditRoutes';
-import knowledgeRoutes from './routes/knowledgeRoutes';
-import chatRoutes from './routes/chatRoutes';
-import pricingRoutes from './routes/pricingRoutes';
-import seedRoutes from './routes/seedRoutes';
-import { rateLimiter } from './middleware/rateLimiter';
-import { seedController } from './controllers/seedController';
+import authRoutes from './routes/authRoutes.js';
+import quoteRoutes from './routes/quoteRoutes.js';
+import calendarRoutes from './routes/calendarRoutes.js';
+import auditRoutes from './routes/auditRoutes.js';
+import knowledgeRoutes from './routes/knowledgeRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
+import pricingRoutes from './routes/pricingRoutes.js';
+import seedRoutes from './routes/seedRoutes.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
+import { seedController } from './controllers/seedController.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+// CRITICAL: Trust proxy for Cloud Run (fixes X-Forwarded-For errors)
+app.set('trust proxy', true);
 
 // Middleware
 app.use(helmet());

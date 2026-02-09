@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pricingService } from '../services/pricingService';
+import { pricingService } from '../services/pricingService.js';
 
 interface AuthRequest extends Request {
   user?: {

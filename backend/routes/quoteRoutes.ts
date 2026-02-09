@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { quoteController } from '../controllers/quoteController';
-import { authenticateToken, requireAuthStage } from '../middleware/authMiddleware';
+import { quoteController } from '../controllers/quoteController.js';
+import { authenticateToken, requireAuthStage } from '../middleware/authMiddleware.js';
 
 const router = Router();
 

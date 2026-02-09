@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { pricingController } from '../controllers/pricingController';
-import { authenticateToken } from '../middleware/authMiddleware';
-import { authRateLimiter } from '../middleware/rateLimiter';
+import { pricingController } from '../controllers/pricingController.js';
+import { authenticateToken } from '../middleware/authMiddleware.js';
+import { authRateLimiter } from '../middleware/rateLimiter.js';
 
 const router = Router();
 

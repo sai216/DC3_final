@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { auditController } from '../controllers/auditController';
-import { authenticateToken } from '../middleware/authMiddleware';
-import { authRateLimiter } from '../middleware/rateLimiter';
+import { auditController } from '../controllers/auditController.js';
+import { authenticateToken } from '../middleware/authMiddleware.js';
+import { authRateLimiter } from '../middleware/rateLimiter.js';
 
 const router = Router();
 
