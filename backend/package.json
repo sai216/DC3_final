@@ -19,6 +19,7 @@
   "dependencies": {
     "@google-cloud/aiplatform": "^3.33.0",
     "@google-cloud/storage": "^7.13.0",
+    "@google-cloud/vertexai": "^1.10.0",
     "@google/generative-ai": "^0.21.0",
     "@prisma/client": "^5.22.0",
     "@privy-io/node": "^0.8.0",
