@@ -1,0 +1,9 @@
+{
+  "name": "1*23*26 \"DC3\" Design",
+  "description": "Decensat Design & Development",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
