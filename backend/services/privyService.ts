@@ -1,28 +1,17 @@
-// TEMPORARILY DISABLED - Privy verification skipped for debugging
-// Will re-enable once PRIVY_APP_SECRET configuration is resolved
-
 import { PrivyClient } from '@privy-io/node';
 
 // Initialize Privy client
 const privyAppId = process.env.PRIVY_APP_ID;
 const privyAppSecret = process.env.PRIVY_APP_SECRET;
 
-// TEMPORARILY COMMENTED OUT - Allow service to start without Privy secrets
-/*
 if (!privyAppId || !privyAppSecret) {
   throw new Error('PRIVY_APP_ID and PRIVY_APP_SECRET must be set in environment variables');
 }
-*/
 
-let privyClient: PrivyClient | null = null;
-
-// Only initialize if secrets are available
-if (privyAppId && privyAppSecret) {
-  privyClient = new PrivyClient({
-    appId: privyAppId,
-    appSecret: privyAppSecret,
-  });
-}
+export const privyClient = new PrivyClient({
+  appId: privyAppId,
+  appSecret: privyAppSecret,
+});
 
 export const privyService = {
   /**
@@ -31,12 +20,6 @@ export const privyService = {
    * @returns The verified claims from the token
    */
   async verifyToken(accessToken: string) {
-    // TEMPORARY: Return mock data if Privy client not initialized
-    if (!privyClient) {
-      console.warn('⚠️ Privy client not initialized - returning mock verification');
-      return { userId: 'temp_user', verified: false };
-    }
-
     try {
       const verifiedClaims = await privyClient.utils().auth().verifyAccessToken(accessToken);
       return verifiedClaims;
@@ -52,12 +35,6 @@ export const privyService = {
    * @returns User information from Privy
    */
   async getUserByDid(userId: string) {
-    // TEMPORARY: Return mock data if Privy client not initialized
-    if (!privyClient) {
-      console.warn('⚠️ Privy client not initialized - returning mock user');
-      return { id: userId };
-    }
-
     try {
       const user = await privyClient.users()._get(userId);
       return user;
@@ -73,12 +50,6 @@ export const privyService = {
    * @returns User information from Privy
    */
   async getUserByWalletAddress(walletAddress: string) {
-    // TEMPORARY: Return null if Privy client not initialized
-    if (!privyClient) {
-      console.warn('⚠️ Privy client not initialized');
-      return null;
-    }
-
     try {
       const user = await privyClient.users().getByWalletAddress({
         address: walletAddress,
@@ -96,12 +67,6 @@ export const privyService = {
    * @returns User information from Privy
    */
   async getUserByEmail(email: string) {
-    // TEMPORARY: Return null if Privy client not initialized
-    if (!privyClient) {
-      console.warn('⚠️ Privy client not initialized');
-      return null;
-    }
-
     try {
       const user = await privyClient.users().getByEmailAddress({
         address: email,

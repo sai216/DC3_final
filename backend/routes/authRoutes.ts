@@ -1,8 +1,7 @@
-import { Router } from 'express';
 import { authController } from '../controllers/authController.js';
-// import { validateEmail, validatePhone } from '../middleware/validator'; // Commented out - using Privy auth
 import { authenticateToken } from '../middleware/authMiddleware.js';
 import { authRateLimiter } from '../middleware/rateLimiter.js';
+import { Router } from 'express';
 
 const router = Router();
 

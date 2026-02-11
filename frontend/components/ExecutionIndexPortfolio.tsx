@@ -1,4 +1,4 @@
-import React, { useState, useRef, memo, useCallback } from 'react';
+import React, { useState, useRef, memo, useCallback, useEffect } from 'react';
 import type { StaticImageData } from 'next/image';
 import { 
   Database, ArrowUpRight, ChevronLeft, ChevronRight, ShieldCheck, FileText
@@ -162,58 +162,19 @@ const PORTFOLIO_DATA: ProjectNode[] = [
 ];
 
 const ProjectCard = memo(({ node }: { node: ProjectNode }) => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x, y });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => setMousePos({ x: 0, y: 0 }), []);
-
   return (
-    <div
-    ref={cardRef}
-    onMouseMove={handleMouseMove}
-    onMouseLeave={handleMouseLeave}
-      className="flex-shrink-0 w-full snap-center group bg-gradient-to-b from-[#020617] to-[#0a0e1f] border-2 border-white/5 rounded-2xl sm:rounded-3xl lg:rounded-[3rem] p-0 flex flex-col transition-all duration-700 ease-expo relative overflow-hidden transform-gpu hover:border-decensat hover:shadow-[0_0_60px_rgba(163,230,53,0.5)] hover:scale-[1.02] min-h-[460px] sm:min-h-[540px] lg:min-h-[620px]">
-      <div className="absolute inset-0 z-0 transition-transform duration-700 ease-out pointer-events-none" style={{ transform: `scale(1.1) translate(${mousePos.x * -15}px, ${mousePos.y * -15}px)` }}>
-        <img src={toImageSrc(node.image)} alt={node.name} className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100 group-hover:opacity-0" />
-        <img src={toImageSrc(node.hoverImage)} alt={`${node.name} Hover`} className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100 group-hover:brightness-110" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-100 group-hover:opacity-70 transition-opacity duration-700" />
-      </div>
-
-      <div className="relative z-10 flex-1 flex flex-col p-5 sm:p-7 lg:p-10">
-
-        <div className="mt-auto pt-5 sm:pt-7 border-t border-white/5 group-hover:border-decensat/30 transition-colors duration-500 flex flex-col gap-3 sm:gap-4 relative group/desc">
-          <p className="text-slate-300 group-hover:text-white font-bold text-xs sm:text-sm lg:text-base uppercase tracking-tight leading-relaxed border-l-2 border-decensat/40 group-hover:border-decensat pl-4 sm:pl-6 pr-16 sm:pr-24 transition-all duration-500">
-             {node.longDescription}
-           </p>
-           {node.caseStudyUrl && node.caseStudyUrl !== '#' && (
-             <a 
-                href={node.caseStudyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="absolute bottom-0 right-0 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-decensat/10 border border-decensat/20 rounded-lg text-[8px] sm:text-[9px] font-black text-decensat uppercase tracking-widest hover:bg-decensat hover:text-black transition-all shadow-glow-sm"
-              >
-                <FileText size={10} className="sm:w-3 sm:h-3" />
-                CASE_STUDY
-              </a>
-           )}
-        </div>
-      </div>
-      
-        <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 pb-5 sm:pb-7 lg:pb-8 px-5 sm:px-7 lg:px-10 border-t border-white/5 group-hover:border-decensat/20 transition-colors duration-500 flex items-center justify-between group-hover:text-decensat relative z-10">
-          <span className="text-[7px] sm:text-[8px] font-mono font-black text-slate-600 group-hover:text-decensat uppercase tracking-widest flex items-center gap-2 sm:gap-3 transition-colors duration-500"><ShieldCheck size={11} className="sm:w-[13px] sm:h-[13px] opacity-60 group-hover:opacity-100 group-hover:text-decensat transition-all duration-500" /> {node.month} {node.year}</span>
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:bg-decensat/20 group-hover:border-decensat group-hover:shadow-[0_0_20px_rgba(163,230,53,0.6)]">
-            <ArrowUpRight size={18} className="sm:w-[22px] sm:h-[22px] transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-decensat" />
-        </div>
-      </div>
+    <div className="group relative w-full h-full transition-all duration-500 hover:scale-[1.02]">
+      {/* Just the images - no border wrapper needed */}
+      <img 
+        src={toImageSrc(node.image)} 
+        alt={node.name} 
+        className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 opacity-100 group-hover:opacity-0" 
+      />
+      <img 
+        src={toImageSrc(node.hoverImage)} 
+        alt={`${node.name} Hover`} 
+        className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500 opacity-0 group-hover:opacity-100" 
+      />
     </div>
   );
 });
@@ -222,11 +183,12 @@ ProjectCard.displayName = 'ProjectCard';
 
 const ExecutionIndexPortfolio: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 500;
+      const scrollAmount = 440;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -234,91 +196,102 @@ const ExecutionIndexPortfolio: React.FC = () => {
     }
   };
 
-  const scrollToIndex = (index: number) => {
+  const checkScroll = useCallback(() => {
     if (scrollRef.current) {
-      const cardWidth = scrollRef.current.scrollWidth / PORTFOLIO_DATA.length;
-      scrollRef.current.scrollTo({
-        left: cardWidth * index,
-        behavior: 'smooth'
-      });
-      setActiveIndex(index);
-    }
-  };
-
-  // Track scroll position for mobile navigation
-  const handleScroll = useCallback(() => {
-    if (scrollRef.current) {
-      const scrollLeft = scrollRef.current.scrollLeft;
-      const cardWidth = scrollRef.current.scrollWidth / PORTFOLIO_DATA.length;
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      setActiveIndex(newIndex);
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
   }, []);
 
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', checkScroll);
+      checkScroll();
+      return () => scrollElement.removeEventListener('scroll', checkScroll);
+    }
+  }, [checkScroll]);
+
   return (
-    <div className="space-y-8 sm:space-y-12 lg:space-y-16">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8 lg:gap-10 border-l-[6px] sm:border-l-[8px] lg:border-l-[12px] border-decensat pl-4 sm:pl-8 lg:pl-12 animate-in slide-in-from-left duration-1000">
-        <div className="max-w-4xl">
-          <h2 className="font-black text-white uppercase leading-[0.95] mb-3 sm:mb-4" style={{fontSize: 'clamp(1.15rem, 4vw, 2.35rem)', letterSpacing: '-0.04em'}}>
-            Execution <span className="text-decensat italic">Index</span>
-          </h2>
-          <p className="text-sm sm:text-base lg:text-xl text-slate-400 font-bold leading-tight uppercase tracking-tight max-w-3xl">
-            Deterministic build history and protocol-verified proof of delivery.
-          </p>
-        </div>
-
-        {/* Desktop Scroll Arrow Buttons */}
-        <div className="hidden md:flex gap-4 shrink-0">
-          <button 
-            onClick={() => scroll('left')} 
-            className="p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 text-slate-500 hover:text-decensat transition-all active:scale-90 shadow-2xl group"
-          >
-            <ChevronLeft size={28} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform lg:w-8 lg:h-8" />
-          </button>
-          <button 
-            onClick={() => scroll('right')} 
-            className="p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 text-slate-500 hover:text-decensat transition-all active:scale-90 shadow-2xl group"
-          >
-            <ChevronRight size={28} strokeWidth={3} className="group-hover:translate-x-1 transition-transform lg:w-8 lg:h-8" />
-          </button>
-        </div>
-      </div>
-
-      <div 
-        ref={scrollRef}
-        onScroll={handleScroll}
-        className="flex overflow-x-auto gap-3 sm:gap-6 lg:gap-8 pb-6 sm:pb-8 snap-x snap-mandatory no-scrollbar scroll-smooth px-3 sm:px-0"
-      >
-        {PORTFOLIO_DATA.map(node => (
-          <div key={node.id} className="min-w-[86vw] xs:min-w-[78vw] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[420px]">
-            <ProjectCard node={node} />
+    <section className="w-full bg-zinc-950 py-16 md:py-24 overflow-visible">
+      <div className="w-full px-6 md:px-8 lg:px-12 space-y-10 md:space-y-14">
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-l-8 border-decensat pl-6 md:pl-10">
+          <div className="max-w-4xl">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase leading-tight mb-4">
+              Execution <span className="text-decensat italic">Index</span>
+            </h2>
+            <p className="text-base md:text-lg text-slate-400 font-bold uppercase tracking-tight">
+              Deterministic build history and protocol-verified proof of delivery.
+            </p>
           </div>
-        ))}
+
+          {/* Desktop Navigation Arrows */}
+          <div className="hidden md:flex gap-4 shrink-0">
+            <button 
+              onClick={() => scroll('left')}
+              disabled={!canScrollLeft}
+              className={`p-5 rounded-2xl border-2 transition-all ${
+                canScrollLeft 
+                  ? 'bg-white/5 border-white/20 text-white hover:bg-decensat hover:text-black hover:border-decensat' 
+                  : 'bg-white/5 border-white/10 text-white/30 cursor-not-allowed'
+              }`}
+            >
+              <ChevronLeft size={26} strokeWidth={3} />
+            </button>
+            <button 
+              onClick={() => scroll('right')}
+              disabled={!canScrollRight}
+              className={`p-5 rounded-2xl border-2 transition-all ${
+                canScrollRight 
+                  ? 'bg-white/5 border-white/20 text-white hover:bg-decensat hover:text-black hover:border-decensat' 
+                  : 'bg-white/5 border-white/10 text-white/30 cursor-not-allowed'
+              }`}
+            >
+              <ChevronRight size={26} strokeWidth={3} />
+            </button>
+          </div>
+        </div>
+
+        {/* Horizontal Scrolling Cards - NO CONTAINER BOX */}
+        <div 
+          ref={scrollRef}
+          className="flex overflow-x-auto gap-4 md:gap-6 lg:gap-8 py-6 px-2 snap-x snap-mandatory scrollbar-hide -mx-4 md:-mx-6 lg:-mx-10"
+          style={{ 
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch'
+          }}
+        >
+          {PORTFOLIO_DATA.map(node => (
+            <div 
+              key={node.id} 
+              className="flex-shrink-0 snap-center w-[85vw] sm:w-[380px] md:w-[420px] lg:w-[460px] px-2"
+              style={{
+                aspectRatio: '9 / 16'
+              }}
+            >
+              <ProjectCard node={node} />
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile Scroll Indicator */}
+        <div className="flex md:hidden justify-center items-center gap-2 animate-pulse">
+          <ChevronLeft size={14} className="text-slate-600" />
+          <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Swipe to explore</span>
+          <ChevronRight size={14} className="text-slate-600" />
+        </div>
       </div>
 
-      {/* Mobile Navigation Dots */}
-      <div className="flex md:hidden justify-center items-center gap-2 pb-4">
-        {PORTFOLIO_DATA.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToIndex(index)}
-            className={`transition-all duration-300 rounded-full ${
-              activeIndex === index 
-                ? 'w-8 h-2 bg-decensat' 
-                : 'w-2 h-2 bg-white/20 hover:bg-white/40'
-            }`}
-            aria-label={`Go to project ${index + 1}`}
-          />
-        ))}
-      </div>
-
-      {/* Mobile Swipe Indicator (shows on first load) */}
-      <div className="flex md:hidden justify-center items-center gap-2 pb-2 animate-pulse">
-        <ChevronLeft size={16} className="text-slate-600" />
-        <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Swipe to explore</span>
-        <ChevronRight size={16} className="text-slate-600" />
-      </div>
-    </div>
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </section>
   );
 };
 

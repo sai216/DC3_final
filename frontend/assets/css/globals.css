@@ -198,11 +198,135 @@ body {
 
 /* Ensure selection colors work */
 ::selection {
-  background-color: var(--decensat-lime);
+  background-color: var(--decensat-lime);   
   color: #000;
 }
 
 ::-moz-selection {
-  background-color: var(--decensat-lime);
-  color: #000;
+  background-color: var(--decensat-lime); 
+}
+
+/* ====================================================================
+   PHONE INPUT DARK THEME STYLING (react-phone-input-2)
+   ==================================================================== */
+
+/* Flag dropdown button */
+.phone-input-dark .react-tel-input .flag-dropdown {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+}
+
+.phone-input-dark .react-tel-input .selected-flag:hover,
+.phone-input-dark .react-tel-input .selected-flag:focus {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Country list dropdown */
+.phone-input-dark .react-tel-input .country-list {
+  background: rgba(9, 9, 11, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4) !important;
+  margin-top: 8px !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+/* Individual country option */
+.phone-input-dark .react-tel-input .country-list .country {
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 12px 16px !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.phone-input-dark .react-tel-input .country-list .country:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.phone-input-dark .react-tel-input .country-list .country.highlight {
+  background: rgba(163, 230, 53, 0.15) !important;
+}
+
+/* Country name and dial code */
+.phone-input-dark .react-tel-input .country-list .country .country-name {
+  color: #ffffff !important;
+  margin-right: 6px !important;
+}
+
+.phone-input-dark .react-tel-input .country-list .country .dial-code {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+}
+
+/* Search box */
+.phone-input-dark .react-tel-input .country-list .search {
+  background: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.75rem !important;
+  color: #ffffff !important;
+  padding: 10px 12px !important;
+  margin: 12px 12px 8px 12px !important;
+  font-size: 14px !important;
+}
+
+.phone-input-dark .react-tel-input .country-list .search::placeholder {
+  color: #64748b !important;
+}
+
+.phone-input-dark .react-tel-input .country-list .search:focus {
+  outline: none !important;
+  border-color: rgba(163, 230, 53, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1) !important;
+}
+
+/* Scrollbar for dropdown */
+.phone-input-dark .react-tel-input .country-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.phone-input-dark .react-tel-input .country-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.phone-input-dark .react-tel-input .country-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.phone-input-dark .react-tel-input .country-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(163, 230, 53, 0.4);
+}
+
+/* Flag icon scaling */
+.phone-input-dark .react-tel-input .selected-flag .flag {
+  transform: scale(1.1);
+}
+
+.phone-input-dark .react-tel-input .country-list .country .flag {
+  margin-right: 12px;
+  transform: scale(1.1);
+}
+
+/* Arrow icon for dropdown */
+.phone-input-dark .react-tel-input .selected-flag .arrow {
+  border-top-color: #94a3b8 !important;
+}
+
+.phone-input-dark .react-tel-input .selected-flag .arrow.up {
+  border-bottom-color: #94a3b8 !important;
+  border-top-color: transparent !important;
+}
+
+/* No results message */
+.phone-input-dark .react-tel-input .country-list .no-entries-message {
+  color: #64748b !important;
+  padding: 16px !important;
+  text-align: center !important;
+  font-size: 14px !important;
 }

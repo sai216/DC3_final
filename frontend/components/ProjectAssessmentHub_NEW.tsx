@@ -711,11 +711,11 @@ const ProjectAssessmentHub: React.FC<{ onLogin?: (email: string) => void }> = ({
                         autoComplete: 'tel',
                         placeholder: 'Search country, then enter number',
                       }}
-                      containerClass="w-full phone-input-transparent"
+                      containerClass="w-full phone-input-dark"
                       inputClass="!w-full !bg-transparent !text-white !font-black !text-xs sm:!text-lg !tracking-tight !py-3 sm:!py-4 !px-4 !pl-14 !border !border-white/10 !rounded-2xl !shadow-inner !placeholder:text-slate-800"
                       buttonClass="!bg-black/60 !border !border-white/10 !rounded-2xl !w-12 !h-12 sm:!h-14"
-                      dropdownClass="!bg-zinc-950 !text-white !border !border-white/10 !rounded-2xl"
-                      searchClass="!bg-black/70 !text-white !border !border-white/10 !rounded-xl !mx-3 !mt-3 !mb-2"
+                      dropdownClass="!bg-zinc-950/95 !backdrop-blur-md !text-white !border !border-white/10 !rounded-2xl !shadow-2xl"
+                      searchClass="!bg-black/70 !text-white !border !border-white/10 !rounded-xl !mx-3 !mt-3 !mb-2 !placeholder:text-slate-600"
                     />
                   </div>
                 </div>
@@ -931,34 +931,34 @@ const ProjectAssessmentHub: React.FC<{ onLogin?: (email: string) => void }> = ({
 
   return (
     <div id="project-assessment" className="min-h-0 bg-[#020617] flex flex-col relative overflow-hidden py-10 xs:py-16 sm:py-24 px-4 sm:px-12 max-w-[1920px] mx-auto w-full">
-      <div className="absolute inset-0 bg-grid-f4a opacity-5 pointer-events-none" />
-      
-      {currentStep !== 'confirmation_email' && (
-        <div className="flex gap-1 sm:gap-5 w-full mb-8 xs:mb-16 max-w-7xl mx-auto px-1 sm:px-0">
-          {STEPS.filter(s => s !== 'confirmation_email').map((s, i) => (
-            <div key={String(s)} className="flex-1 group flex flex-col gap-2 sm:gap-3">
-              <div className="h-1 sm:h-1.5 rounded-full relative overflow-hidden bg-white/5 border border-white/5 shadow-inner">
-                <div 
-                  className={`h-full transition-all duration-1000 ease-expo ${i <= activeStepIndex ? 'bg-decensat shadow-glow-sm' : 'bg-transparent'}`} 
-                  style={{ width: i <= activeStepIndex ? '100%' : '0%' }} 
-                />
+        <div className="absolute inset-0 bg-grid-f4a opacity-5 pointer-events-none" />
+        
+        {currentStep !== 'confirmation_email' && (
+          <div className="flex gap-1 sm:gap-5 w-full mb-8 xs:mb-16 max-w-7xl mx-auto px-1 sm:px-0">
+            {STEPS.filter(s => s !== 'confirmation_email').map((s, i) => (
+              <div key={String(s)} className="flex-1 group flex flex-col gap-2 sm:gap-3">
+                <div className="h-1 sm:h-1.5 rounded-full relative overflow-hidden bg-white/5 border border-white/5 shadow-inner">
+                  <div 
+                    className={`h-full transition-all duration-1000 ease-expo ${i <= activeStepIndex ? 'bg-decensat shadow-glow-sm' : 'bg-transparent'}`} 
+                    style={{ width: i <= activeStepIndex ? '100%' : '0%' }} 
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-      
-      <div className="flex-1 relative max-w-7xl mx-auto w-full">
-        <div className={`h-full transition-all duration-700 ease-expo transform-gpu ${isTransitioning || isLoading ? 'opacity-0 translate-y-6 blur-md' : 'opacity-100 translate-y-0 blur-0'}`}>
-          {renderStepContent()}
-        </div>
-        {(isTransitioning || isLoading) && (
-          <ProtocolSyncOverlay 
-            message={isLoading ? "Processing..." : "Transitioning..."} 
-          />
+            ))}
+          </div>
         )}
+        
+        <div className="flex-1 relative max-w-7xl mx-auto w-full">
+          <div className={`h-full transition-all duration-700 ease-expo transform-gpu ${isTransitioning || isLoading ? 'opacity-0 translate-y-6 blur-md' : 'opacity-100 translate-y-0 blur-0'}`}>
+            {renderStepContent()}
+          </div>
+          {(isTransitioning || isLoading) && (
+            <ProtocolSyncOverlay 
+              message={isLoading ? "Processing..." : "Transitioning..."} 
+            />
+          )}
+        </div>
       </div>
-    </div>
   );
 };
 

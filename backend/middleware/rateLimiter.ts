@@ -13,6 +13,9 @@ export const rateLimiter = rateLimit({
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  validate: {
+    trustProxy: false, // Disable trust proxy validation
+  },
 });
 
 /**
@@ -29,6 +32,9 @@ export const otpRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: false, // Count all requests, even successful ones
+  validate: {
+    trustProxy: false, // Disable trust proxy validation
+  },
 });
 
 /**
@@ -44,4 +50,7 @@ export const authRateLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  validate: {
+    trustProxy: false, // Disable trust proxy validation
+  },
 });

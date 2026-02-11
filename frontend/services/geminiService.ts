@@ -75,7 +75,7 @@ const getSystemInstruction = (
 export const analyzeTalentLoomAudit = async (
   applicantData: { applicant_id: string; age: number; loom_url: string; summary_transcript: string }
 ): Promise<any> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_API_KEY });
   const model = 'gemini-3-pro-preview';
 
   try {
@@ -107,7 +107,7 @@ export const generateSuraResponseStream = async (
   targetContext: string | null = null,
   sessionContext?: Partial<UserProfile>
 ): Promise<{ text: string; sources?: { uri: string; title: string }[] }> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_API_KEY });
   const model = 'gemini-3-pro-preview';
 
   const systemInstruction = getSystemInstruction(contextType, sessionContext) + 
@@ -166,7 +166,7 @@ export const generateSuraResponseStream = async (
 };
 
 export const generateSeoMetadata = async (heroContent: string, feedContent: string): Promise<SeoMetadata> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
